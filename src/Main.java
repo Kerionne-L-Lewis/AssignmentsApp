@@ -10,6 +10,17 @@ public class Main {
         tomorrowsDate();
         fiveWksAdded();
 
+        birthdate();
+
+
+    }
+
+    private static void birthdate() {
+        LocalDateTime borndate= LocalDateTime.of(1996, 10,10,
+                12,35);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+        String formatDateTime = borndate.format(formatter);
+        System.out.println("My birthDate: " + formatDateTime);
     }
 
     private static void fiveWksAdded() {
