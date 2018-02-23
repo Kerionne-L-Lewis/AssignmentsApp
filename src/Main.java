@@ -1,4 +1,5 @@
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -9,32 +10,33 @@ public class Main {
         System.out.println("Today's Date: " + LocalDateTime.now());
         tomorrowsDate();
         fiveWksAdded();
+        LocalDateTime borndate = LocalDateTime.of(1996, 10, 10,
+                12, 35);
 
-        birthdate();
+   
+        birthday(borndate);
 
 
     }
 
-    private static void birthdate() {
-        LocalDateTime borndate= LocalDateTime.of(1996, 10,10,
-                12,35);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
-        String formatDateTime = borndate.format(formatter);
-        System.out.println("My birthDate: " + formatDateTime);
+    private static void birthday(LocalDateTime borndate) {
+        System.out.println("The day of the week I was born on is " +DayOfWeek.from(borndate) );
+    }
+        private static void fiveWksAdded () {
+            LocalDateTime today = LocalDateTime.now();
+            LocalDateTime fiveWeeks = today.plusWeeks(5);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+            String formatDateTime =fiveWeeks.format(formatter);
+            System.out.println("Add Five Weeks to today's Date " + formatDateTime);
+        }
+
+        private static void tomorrowsDate () {
+            LocalDateTime today = LocalDateTime.now();
+            LocalDateTime tomorrow = today.plusDays(1);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+            String formatDateTime = tomorrow.format(formatter);
+            System.out.println("Tomorrow's Date:" + formatDateTime);
+        }
     }
 
-    private static void fiveWksAdded() {
-        LocalDateTime today = LocalDateTime.now();
-        LocalDateTime fiveWeeks=today.plusWeeks(5);
-        System.out.println("Add Five Weeks to today's Date:" + fiveWeeks);
-    }
-
-    private static void tomorrowsDate() {
-        LocalDateTime today = LocalDateTime.now();
-        LocalDateTime tomorrow=today.plusDays(1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
-        String formatDateTime = tomorrow.format(formatter);
-        System.out.println("Tomorrow's Date:" +formatDateTime);
-    }
-}
 
