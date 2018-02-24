@@ -16,8 +16,18 @@ public class Main {
                 12, 35);
         birthday(borndate);
         daysBeenAlive(borndate);
+        numDaysBetweenTwoDates();
 
 
+
+    }
+
+    private static void numDaysBetweenTwoDates() {
+        LocalDateTime date1 = LocalDateTime.of(2005,05, 26, 10,
+                50);
+        LocalDateTime date2 = LocalDateTime.of(2016,9,12,1,15);
+        long daysBetween= ChronoUnit.DAYS.between(date1,date2);
+        System.out.println("The days between "+ date1 + " and " + date2 + " is " + daysBetween);
     }
 
     private static void daysBeenAlive(LocalDateTime borndate) {
