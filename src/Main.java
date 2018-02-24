@@ -17,9 +17,20 @@ public class Main {
         birthday(borndate);
         daysBeenAlive(borndate);
         numDaysBetweenTwoDates();
+        outputEarlierDate();
 
 
 
+    }
+
+    private static void outputEarlierDate() {
+    LocalDateTime date1 = LocalDateTime.of(2017,4,17,2,
+            25);
+        LocalDateTime date2 = LocalDateTime.of(1917,1,5,2,
+                35);
+        System.out.println("Is "+ date1 + " before "+ date2 + ": " + date1.isBefore(date2));
+        System.out.println("Is "+ date1 + " after "+ date2 + ": " +  date1.isAfter(date2));
+        System.out.println(date1 + " compared to " + date2 + " is " +date1.compareTo(date2));
     }
 
     private static void numDaysBetweenTwoDates() {
