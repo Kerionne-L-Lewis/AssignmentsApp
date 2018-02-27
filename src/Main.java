@@ -3,12 +3,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
@@ -40,10 +40,25 @@ public class Main {
 
         outputEarlierDate(date1, date2);
 
-
         randomToFile();
+        ArrayList<String> datesFromFile =readFromAFile();
+        System.out.println(datesFromFile);
 
 
+    }
+
+    private static ArrayList<String> readFromAFile() {
+        File infile= new File("Dates.txt");
+        ArrayList<String>dates = new ArrayList<>();
+        try(Scanner sc= new Scanner(infile)){
+        while (sc.hasNext()){
+            String name = sc.next();
+            dates.add(name);
+        }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return dates;
     }
 
     private static void randomToFile() {
