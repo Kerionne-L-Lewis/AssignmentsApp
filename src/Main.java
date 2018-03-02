@@ -6,9 +6,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -42,15 +40,44 @@ public class Main {
 
         randomToFile();
         ArrayList<String> datesFromFile = readFromAFile();
-        System.out.println(datesFromFile);
-        numberOfDatesDuringYear("2006", datesFromFile);
+        System.out.println("Data stored from a file " + datesFromFile);
+
+        outputNumberOfDates("2018",datesFromFile);
+
+        countNumberOfDatesDuringYear("2018", datesFromFile);
+
+        //Count the number of duplicates.use set
+
+        Set<String> dupes= findDupes(datesFromFile);
+        System.out.println("Here is the set "+ dupes);
+
+      //  Map<String, Integer> countDuplicates=duplicatesCount()
+
 
     }
 
-    private static void numberOfDatesDuringYear(String year, ArrayList<String> datesFromFile) {
+    private static Set<String> findDupes(ArrayList<String> datesFromFile) {
+        Set<String> dateList=new HashSet<>();
+        for (int i = 0; i <datesFromFile.size() ; i++) {
+
+            dateList.add(datesFromFile.get(i));
+
+        }
+        return dateList;
+    }
+
+    private static void outputNumberOfDates(String s, ArrayList<String> datesFromFile) {
+        for (int i = 0; i <datesFromFile.size() ; i++) {
+            if (datesFromFile.=s){
+                System.out.println(" The number of stored dates: " +datesFromFile.size() );
+            }
+        }
+    }
+
+    private static void countNumberOfDatesDuringYear(String year, ArrayList<String> datesFromFile) {
         int count = 0;
         for (int j = 0; j < datesFromFile.size(); j++) {
-            if (datesFromFile.get(j) == year) {
+            if (datesFromFile.get(j)==year ) {
                 count++;
             }
         }
@@ -58,20 +85,25 @@ public class Main {
                 + count);
     }
 
-
     private static ArrayList<String> readFromAFile() {
         File infile = new File("Dates.txt");
-        ArrayList<String> dates = new ArrayList<>();
+        ArrayList<String> datesAndTimes = new ArrayList<>();
         try (Scanner sc = new Scanner(infile)) {
             while (sc.hasNext()) {
-                String name = sc.next();
-                dates.add(name);
+                String date = sc.next();
+                System.out.println("Is this a date? " + date);
+
+                String[] parts = date.split("/");
+                for (int i = 0; i <parts.length ; i++) {
+                    System.out.println("split " + i + "is" + parts[i]);
+                }
+                datesAndTimes.add(date);
 
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return dates;
+        return datesAndTimes;
     }
 
     private static void randomToFile() {
