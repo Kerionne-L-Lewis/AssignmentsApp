@@ -58,8 +58,21 @@ public class Main {
         Collections.sort(datesFromFile);
         System.out.println("Sorted " + datesFromFile);
 
+        int numOfDupesNoSet= noSet(datesFromFile);
+        System.out.println("These are the number of dupes without a Set " + numOfDupesNoSet);
 
 
+
+    }
+
+    private static int noSet(ArrayList<LocalDateTime> datesFromFile) {
+        int count=0;
+        for (int i = 0; i < datesFromFile.size(); i++) {
+            if (datesFromFile.get(i)==datesFromFile.get(i)){
+                count++;
+            }
+        }
+        return count;
     }
 
     private static Map<LocalDateTime,Integer> countingDupesInSet(ArrayList<LocalDateTime> datesFromFile) {
@@ -75,7 +88,7 @@ public class Main {
         }
         return countingDupes;
         }
-        
+
     private static Set<LocalDateTime> findDupes(ArrayList<LocalDateTime> datesFromFile) {
         Set<LocalDateTime> dateList=new HashSet<>();
         for (int i = 0; i <datesFromFile.size() ; i++) {
