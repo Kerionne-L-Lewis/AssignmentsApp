@@ -39,67 +39,94 @@ public class Main {
         outputEarlierDate(date1, date2);
 
         randomToFile();
-        ArrayList<String> datesFromFile = readFromAFile();
+
+        ArrayList<LocalDateTime> datesFromFile = readFromAFile();
         System.out.println("Data stored from a file " + datesFromFile);
 
-        outputNumberOfDates("2018",datesFromFile);
+       outputNumberOfDates(datesFromFile);
 
-        countNumberOfDatesDuringYear("2018", datesFromFile);
+       int numOfDates= countNumberOfDatesDuringYear( datesFromFile);
+       System.out.println("The number of stored dates in year "
+             +numOfDates );
 
-        //Count the number of duplicates.use set
+       Set<LocalDateTime> dupes= findDupes(datesFromFile);
+        System.out.println("Here is the set (" + dupes.size() + ")"+ dupes);
 
-        Set<String> dupes= findDupes(datesFromFile);
-        System.out.println("Here is the set "+ dupes);
+        Map<LocalDateTime, Integer> countDupes=countingDupesInSet(datesFromFile);
+        System.out.println("counting dupes: " + countDupes);
 
-      //  Map<String, Integer> countDuplicates=duplicatesCount()
+        Collections.sort(datesFromFile);
+        System.out.println("Sorted " + datesFromFile);
+
 
 
     }
 
-    private static Set<String> findDupes(ArrayList<String> datesFromFile) {
-        Set<String> dateList=new HashSet<>();
+    private static Map<LocalDateTime,Integer> countingDupesInSet(ArrayList<LocalDateTime> datesFromFile) {
+   Map<LocalDateTime, Integer> countingDupes = new HashMap<>();
         for (int i = 0; i <datesFromFile.size() ; i++) {
-
+            LocalDateTime dupe = datesFromFile.get(i);
+            if (countingDupes.containsKey(dupe)) {
+                int count = countingDupes.get(dupe);
+                countingDupes.put(dupe, count + 1);
+            } else {
+                countingDupes.put(dupe, 1);
+            }
+        }
+        return countingDupes;
+        }
+        
+    private static Set<LocalDateTime> findDupes(ArrayList<LocalDateTime> datesFromFile) {
+        Set<LocalDateTime> dateList=new HashSet<>();
+        for (int i = 0; i <datesFromFile.size() ; i++) {
             dateList.add(datesFromFile.get(i));
 
         }
         return dateList;
     }
 
-    private static void outputNumberOfDates(String s, ArrayList<String> datesFromFile) {
-        for (int i = 0; i <datesFromFile.size() ; i++) {
-            if (datesFromFile.=s){
-                System.out.println(" The number of stored dates: " +datesFromFile.size() );
+    private static void outputNumberOfDates(ArrayList<LocalDateTime> datesFromFile) {
+        for (LocalDateTime time: datesFromFile) {
+            if (time.getYear() == 2018){
+                System.out.print("Output the dates in the year " + datesFromFile);
             }
         }
     }
 
-    private static void countNumberOfDatesDuringYear(String year, ArrayList<String> datesFromFile) {
+   private static int countNumberOfDatesDuringYear(ArrayList<LocalDateTime> datesFromFile) {
         int count = 0;
         for (int j = 0; j < datesFromFile.size(); j++) {
-            if (datesFromFile.get(j)==year ) {
+            if (datesFromFile.get(j).getYear()==2018) {
                 count++;
             }
         }
-        System.out.println("The number of stored dates in year "+ year + " is " +
-                + count);
+        return count;
     }
 
-    private static ArrayList<String> readFromAFile() {
+    private static ArrayList<LocalDateTime> readFromAFile() {
         File infile = new File("Dates.txt");
-        ArrayList<String> datesAndTimes = new ArrayList<>();
+        ArrayList<LocalDateTime> datesAndTimes = new ArrayList<>();
         try (Scanner sc = new Scanner(infile)) {
             while (sc.hasNext()) {
-                String date = sc.next();
-                System.out.println("Is this a date? " + date);
+                String date = sc.nextLine();
 
-                String[] parts = date.split("/");
-                for (int i = 0; i <parts.length ; i++) {
-                    System.out.println("split " + i + "is" + parts[i]);
-                }
-                datesAndTimes.add(date);
+                String[] parts = date.split(" ");
+                String[]partsDate=parts[0].split("/");
+                String[]partsTime= parts[1].split(":");
+
+
+                int year = Integer.parseInt(partsDate[0]);
+                int month = Integer.parseInt(partsDate[1]);
+                int day = Integer.parseInt(partsDate[2]);
+                int hour = Integer.parseInt(partsTime[0]);
+                int minute = Integer.parseInt(partsTime[1]);
+
+               LocalDateTime temp = LocalDateTime.of(year, month, day, hour, minute);
+
+                datesAndTimes.add(temp);
 
             }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
