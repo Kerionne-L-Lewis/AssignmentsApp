@@ -43,41 +43,40 @@ public class Main {
         ArrayList<LocalDateTime> datesFromFile = readFromAFile();
         System.out.println("Data stored from a file " + datesFromFile);
 
-       outputNumberOfDates(datesFromFile);
+        outputDates(datesFromFile, 2017);
 
-       int numOfDates= countNumberOfDatesDuringYear( datesFromFile);
-       System.out.println("The number of stored dates in year "
-             +numOfDates );
+        int numOfDates = countNumberOfDatesDuringYear(datesFromFile, LocalDateTime.now().getYear());
+        System.out.println("The number of stored dates in year "
+                + numOfDates);
 
-       Set<LocalDateTime> dupes= findDupes(datesFromFile);
-        System.out.println("Here is the set (" + dupes.size() + ")"+ dupes);
+        Set<LocalDateTime>count = findDupes(datesFromFile);
+         System.out.println("Here is the set (" + count.size() + ")" + count);
 
-        Map<LocalDateTime, Integer> countDupes=countingDupesInSet(datesFromFile);
-        System.out.println("counting dupes: " + countDupes);
+         Map<LocalDateTime, Integer> countDupes = countingDupesInSet(datesFromFile);
+         System.out.println("counting dupes: " + countDupes);
 
         Collections.sort(datesFromFile);
         System.out.println("Sorted " + datesFromFile);
 
-        int numOfDupesNoSet= noSet(datesFromFile);
-        System.out.println("These are the number of dupes without a Set " + numOfDupesNoSet);
-
+         int dupeCounter= count(datesFromFile);
+        System.out.println("Counting the Duplicates " + dupeCounter);
 
 
     }
 
-    private static int noSet(ArrayList<LocalDateTime> datesFromFile) {
-        int count=0;
+   private static int count(ArrayList<LocalDateTime> datesFromFile) {
+        int count = 0;
         for (int i = 0; i < datesFromFile.size(); i++) {
-            if (datesFromFile.get(i)==datesFromFile.get(i)){
-                count++;
-            }
+            findDupes(datesFromFile);
+            count++;
         }
         return count;
     }
 
-    private static Map<LocalDateTime,Integer> countingDupesInSet(ArrayList<LocalDateTime> datesFromFile) {
-   Map<LocalDateTime, Integer> countingDupes = new HashMap<>();
-        for (int i = 0; i <datesFromFile.size() ; i++) {
+
+    private static Map<LocalDateTime, Integer> countingDupesInSet(ArrayList<LocalDateTime> datesFromFile) {
+        Map<LocalDateTime, Integer> countingDupes = new HashMap<>();
+        for (int i = 0; i < datesFromFile.size(); i++) {
             LocalDateTime dupe = datesFromFile.get(i);
             if (countingDupes.containsKey(dupe)) {
                 int count = countingDupes.get(dupe);
@@ -87,29 +86,34 @@ public class Main {
             }
         }
         return countingDupes;
-        }
+    }
 
     private static Set<LocalDateTime> findDupes(ArrayList<LocalDateTime> datesFromFile) {
         Set<LocalDateTime> dateList=new HashSet<>();
-        for (int i = 0; i <datesFromFile.size() ; i++) {
-            dateList.add(datesFromFile.get(i));
-
+        for (int i = 0; i < datesFromFile.size(); i++) {
+            boolean value = dateList.add(datesFromFile.get(i));
+            if (value==true){
+                dateList.add(value);
+            }
         }
         return dateList;
     }
 
-    private static void outputNumberOfDates(ArrayList<LocalDateTime> datesFromFile) {
-        for (LocalDateTime time: datesFromFile) {
-            if (time.getYear() == 2018){
-                System.out.print("Output the dates in the year " + datesFromFile);
-            }
+    private static void outputDates(ArrayList<LocalDateTime> datesFromFile, int year) {
+        ArrayList<LocalDateTime> numberOfStoredDatesInYear = new ArrayList<>();
+        for (int i = 0; i < datesFromFile.size(); i++) {
+                if (datesFromFile.get(i).getYear() == year) {
+                    numberOfStoredDatesInYear.add(datesFromFile.get(i));
+                }
         }
+        System.out.println("Output the dates in the year " + numberOfStoredDatesInYear.size());
     }
 
-   private static int countNumberOfDatesDuringYear(ArrayList<LocalDateTime> datesFromFile) {
+
+    private static int countNumberOfDatesDuringYear(ArrayList<LocalDateTime> datesFromFile, int year) {
         int count = 0;
         for (int j = 0; j < datesFromFile.size(); j++) {
-            if (datesFromFile.get(j).getYear()==2018) {
+            if (datesFromFile.get(j).getYear() == year) {
                 count++;
             }
         }
@@ -124,8 +128,8 @@ public class Main {
                 String date = sc.nextLine();
 
                 String[] parts = date.split(" ");
-                String[]partsDate=parts[0].split("/");
-                String[]partsTime= parts[1].split(":");
+                String[] partsDate = parts[0].split("/");
+                String[] partsTime = parts[1].split(":");
 
 
                 int year = Integer.parseInt(partsDate[0]);
@@ -134,7 +138,7 @@ public class Main {
                 int hour = Integer.parseInt(partsTime[0]);
                 int minute = Integer.parseInt(partsTime[1]);
 
-               LocalDateTime temp = LocalDateTime.of(year, month, day, hour, minute);
+                LocalDateTime temp = LocalDateTime.of(year, month, day, hour, minute);
 
                 datesAndTimes.add(temp);
 
@@ -186,5 +190,6 @@ public class Main {
 
 
 }
+
 
 
