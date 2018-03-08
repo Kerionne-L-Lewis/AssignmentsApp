@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -49,29 +50,88 @@ public class Main {
         System.out.println("The number of stored dates in year "
                 + numOfDates);
 
-        Set<LocalDateTime>count = findDupes(datesFromFile);
-         System.out.println("Here is the set (" + count.size() + ")" + count);
+        int count = findDupes(datesFromFile);
+        System.out.println("Here is the set counter (" + count + ")");
 
-         Map<LocalDateTime, Integer> countDupes = countingDupesInSet(datesFromFile);
-         System.out.println("counting dupes: " + countDupes);
+        Map<LocalDateTime, Integer> countDupes = countingDupesInSet(datesFromFile);
+        System.out.println("counting dupes: " + countDupes);
 
         Collections.sort(datesFromFile);
         System.out.println("Sorted " + datesFromFile);
 
-         int dupeCounter= count(datesFromFile);
+        int dupeCounter = count(datesFromFile);
         System.out.println("Counting the Duplicates " + dupeCounter);
 
+        Map<Month, Integer> countDatesInMonths = howManyDatesInEachMonth(datesFromFile);
+        System.out.println("Count number of dates in a month " + countDatesInMonths);
+
+        ArrayList<Month> months = getMonths(datesFromFile);
+        int countMonthsNoMap = countingMonths(months);
+        for (int i = 0; i < months.size(); i++) {
+            System.out.println(months.get(i) + " " + countMonthsNoMap);
+
+        }
+
+        int indexLastestDate= indexForLatestDate(datesFromFile);
 
     }
 
-   private static int count(ArrayList<LocalDateTime> datesFromFile) {
-        int count = 0;
+    private static int indexForLatestDate(ArrayList<LocalDateTime> datesFromFile) {
+        int answer = 0;
         for (int i = 0; i < datesFromFile.size(); i++) {
-            findDupes(datesFromFile);
-            count++;
+            if (datesFromFile.get(i).isAfter(datesFromFile.get(i))) {
+                answer = i;
+            }
         }
+        return answer;
+    }
+
+
+    private static int countingMonths(ArrayList<Month> months) {
+        Set<Month> monthsSet=new HashSet<>();
+        int count=0;
+        for (int i = 0; i < months.size(); i++) {
+            boolean value = monthsSet.add(months.get(i));
+            if (value == false) {
+             // (no print statement) System.out.println( months.get(i) + " " + count++);
+                count++;
+            }
+        }
+
         return count;
     }
+
+    private static ArrayList<Month> getMonths(ArrayList<LocalDateTime> datesFromFile) {
+        ArrayList<Month>listOfMonths = new ArrayList<>();
+        for (int i = 0; i <datesFromFile.size() ; i++) {
+            Month list= datesFromFile.get(i).getMonth();
+            listOfMonths.add(list);
+        }
+        return listOfMonths;
+    }
+
+    private static Map<Month,Integer> howManyDatesInEachMonth(ArrayList<LocalDateTime> datesFromFile) {
+       Map<Month, Integer>countingDatesInMonth = new HashMap<>();
+        for (int i = 0; i <datesFromFile.size() ; i++) {
+                Month countDatesMonth = datesFromFile.get(i).getMonth();
+                if (countingDatesInMonth.containsKey(countDatesMonth)){
+                    int count= countingDatesInMonth.get(countDatesMonth);
+                    countingDatesInMonth.put(countDatesMonth, count+1);
+                } else{
+                    countingDatesInMonth.put(countDatesMonth, 1);
+                }
+        }
+        return countingDatesInMonth;
+    }
+
+    private static int count(ArrayList<LocalDateTime> datesFromFile) {
+      int count = 0;
+      for (int i = 0; i < datesFromFile.size(); i++) {
+          findDupes(datesFromFile);
+          count++;
+      }
+      return count;
+  }
 
 
     private static Map<LocalDateTime, Integer> countingDupesInSet(ArrayList<LocalDateTime> datesFromFile) {
@@ -88,15 +148,17 @@ public class Main {
         return countingDupes;
     }
 
-    private static Set<LocalDateTime> findDupes(ArrayList<LocalDateTime> datesFromFile) {
+   private static int findDupes(ArrayList<LocalDateTime> datesFromFile) {
         Set<LocalDateTime> dateList=new HashSet<>();
+        int count=0;
         for (int i = 0; i < datesFromFile.size(); i++) {
             boolean value = dateList.add(datesFromFile.get(i));
-            if (value==true){
-                dateList.add(value);
+            if (value == false) {
+                count++;
             }
         }
-        return dateList;
+
+        return count;
     }
 
     private static void outputDates(ArrayList<LocalDateTime> datesFromFile, int year) {
@@ -137,6 +199,7 @@ public class Main {
                 int day = Integer.parseInt(partsDate[2]);
                 int hour = Integer.parseInt(partsTime[0]);
                 int minute = Integer.parseInt(partsTime[1]);
+                
 
                 LocalDateTime temp = LocalDateTime.of(year, month, day, hour, minute);
 
@@ -153,7 +216,7 @@ public class Main {
     private static void randomToFile() {
         File outfile = new File("Dates.txt");
         try (PrintWriter pw = new PrintWriter(outfile)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd hh:mm a");
             Random rand = new Random();
             for (int i = 0; i < 100; i++) {
                 LocalDateTime currentDate = LocalDateTime.now();
